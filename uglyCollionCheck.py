@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import random
 from Hash import DenseHash
-#from Hash import LSTMHash
+from Hash import LSTMHash
 
 LOOPNUM = 100
 
@@ -28,7 +28,7 @@ def Hashloop(model):
         hashmap = dict()
         while not isCollision:
             message = GenerateMessage()
-            outputHash = model.hash(message)
+            outputHash = model.hash(message).tostring()
             if outputHash in hashmap:
                 isCollision = True
             hashmap[outputHash] = True
@@ -41,12 +41,9 @@ def Hashloop(model):
 
 
 if __name__ == '__main__':
-    """
-
-    """
     model = DenseHash()
-    #if len(sys.argv) == 1 and sys.argv == "lstm":
-    #    model = LSTMHash()
+    if len(sys.argv) == 2 and sys.argv[1] == "lstm":
+        model = LSTMHash()
 
     average = Hashloop(model)
     print("There was a collision on the %sth hash" % average)
