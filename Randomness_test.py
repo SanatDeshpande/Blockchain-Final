@@ -8,7 +8,9 @@ import numpy as np
 
 
 def GenerateMessage(multiple):
-    # Generate random length message between 512 and 26,112
+    """
+        Generate random length message between 512 and 26,112
+    """
     data = np.zeros(512 * multiple)
     s = np.random.choice(len(data), np.random.randint(len(data)), replace=False)
     data[s] = 1
@@ -16,6 +18,12 @@ def GenerateMessage(multiple):
 
 
 def randomness_test_control(num_test):
+    """
+    Control Test for Randomness Test using SHA256. Takes a message, flips a bit, and compares the two hashes.
+    Half of the bits should be different between the two messages.
+    :param num_test: Number of tests to be run
+    :return: The average number of bits that are flipped for SH
+    """
     sha_num_set = 0
     for i in range(0, num_test):
         num_set = np.zeros(256)
@@ -34,7 +42,12 @@ def randomness_test_control(num_test):
 
 
 def randomness_test_nn(num_test):
-
+    """
+    Control Test for Randomness Test using SHA256. Takes a message, flips a bit, and compares the two hashes.
+    Half of the bits should be different between the two messages.
+    :param num_test: Number of tests to be run
+    :return: The average number of bits that are flipped for dense and LSTM
+    """
     dnum_set = 0
     lnum_set = 0
     for i in range(0, num_test):

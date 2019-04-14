@@ -9,7 +9,11 @@ import numpy as np
 
 
 def GenerateMessage(multiple):
-    # Generate random length message between 512 and 26,112
+    """
+    Generate random length message of a multiple of 512 bits
+    :param multiple: How many multiples of 512 should be the message
+    :return: Random message
+    """
     data = np.zeros(512 * multiple)
     s = np.random.choice(len(data), np.random.randint(len(data)), replace=False)
     data[s] = 1
@@ -17,7 +21,12 @@ def GenerateMessage(multiple):
 
 
 def test_speed(multiple, num_tests):
+    """
 
+    :param multiple: How long of a message it should be in a multiple of 512 bits
+    :param num_tests: Number of tests to run as a comparison
+    :return: Amount of time to run SHA256, MD5, LSTM, and Dense
+    """
     test_str = ''.join(random.choice(ascii_letters) for j in range(512 * multiple)).encode('UTF-8')
 
     nn_test = GenerateMessage(multiple)

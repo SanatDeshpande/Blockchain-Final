@@ -6,8 +6,13 @@ import numpy as np
 from Hash import LSTMHash
 from Hash import DenseHash
 
+
 def GenerateMessage(multiple):
-    # Generate random length message between 512 and 26,112
+    """
+    Generate random length message between 512 and 26,112
+    :param multiple: How many multiples of 512 the message should be
+    :return: Random Message
+    """
     data = np.zeros(512 * multiple)
     s = np.random.choice(len(data), np.random.randint(len(data)), replace=False)
     data[s] = 1
@@ -15,6 +20,10 @@ def GenerateMessage(multiple):
 
 
 def bit_variance_sha():
+    """
+    Bit Variance test for SHA 256. Calculates how often each bit is set or not set
+    :return: Array of percentage of times bit is set
+    """
     num_set = np.zeros(256)
     for i in range(0,1024):
         test_str = ''.join(random.choice(ascii_letters) for j in range(256)).encode('UTF-8')
@@ -26,6 +35,10 @@ def bit_variance_sha():
 
 
 def bit_variance_LSTM():
+    """
+        Bit Variance test for LSTM. Calculates how often each bit is set or not set
+        :return: Array of percentage of times bit is set
+    """
     num_set = np.zeros(256)
     model = LSTMHash()
     for i in range(0, 1024):
@@ -38,6 +51,10 @@ def bit_variance_LSTM():
 
 
 def bit_variance_Dense():
+    """
+        Bit Variance test for Dense. Calculates how often each bit is set or not set
+        :return: Array of percentage of times bit is set
+    """
     num_set = np.zeros(256)
     model = DenseHash()
     for i in range(0, 1024):
