@@ -5,15 +5,16 @@
 import sys
 import numpy as np
 import random
+import gc
 from Hash import DenseHash
 from Hash import LSTMHash
 
-LOOPNUM = 100
+LOOPNUM = 4
 
 
 def GenerateMessage():
-    # Generate random length message between 512 and 26,112
-    data = np.zeros(512 * random.randint(1, 51))
+    # Generate random length message between 1 * 512 and 20 * 512
+    data = np.zeros(512 * random.randint(1, 21))
     s = np.random.choice(len(data), np.random.randint(len(data)), replace=False)
     data[s] = 1
     return data
@@ -33,10 +34,13 @@ def Hashloop(model):
                 isCollision = True
             hashmap[outputHash] = True
             counter = counter + 1
-            if counter % 100 == 0:
+            gc.collect()
+            if counter % 1000 == 0:
                 print(counter)
+        average += counter
+        print(counter)
 
-    average = average / 100
+    average = average / LOOPNUM
     return average
 
 
