@@ -80,6 +80,23 @@ def bit_variance_Double():
     return num_set / 1024
 
 
+def bit_variance_test(hash_function):
+    """
+    Generic bit variance test. Calculates how often each bit is set or not set
+    :param hash_function: Hash function to test
+    :return: Array of percentage of times bit is set
+    """
+    num_set = np.zeros(256)
+    model = hash_function()
+    for i in range(0, 1024):
+        test_str = GenerateMessage(1)
+        digest = model.hash(test_str)
+        for j in range(0, 256):
+            num_set[j] += digest[j]
+
+    return num_set / 1024
+
+
 def main():
     set_prob = bit_variance_sha()
     bit_num = [i for i in range(0, 256)]
@@ -112,6 +129,14 @@ def main():
     plt.xlabel("Bit Number")
     plt.ylabel("Percentage of time set")
     plt.title("Double Dense - Percentage of Bit Set")
+    plt.ylim(0, 1)
+    plt.show()
+
+    set_prob = bit_variance_test(DenseHash)
+    plt.scatter(bit_num, set_prob)
+    plt.xlabel("Bit Number")
+    plt.ylabel("Percentage of time set")
+    plt.title("Dense Test - Percentage of Bit Set")
     plt.ylim(0, 1)
     plt.show()
 
