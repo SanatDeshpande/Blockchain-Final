@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 from Hash import LSTMHash
 from Hash import DenseHash
+from Hash import DoubleDenseHash
+
 
 
 def GenerateMessage(multiple):
@@ -25,11 +27,11 @@ def bit_variance_sha():
     :return: Array of percentage of times bit is set
     """
     num_set = np.zeros(256)
-    for i in range(0,1024):
+    for i in range(0, 1024):
         test_str = ''.join(random.choice(ascii_letters) for j in range(256)).encode('UTF-8')
         digest = int(hashlib.sha256(test_str).hexdigest(), 16)
         for j in range(0, 256):
-            num_set[j] += (digest & (1 << (255 - j))) >> (255-j)
+            num_set[j] += (digest & (1 << (255 - j))) >> (255 - j)
 
     return num_set / 1024
 
@@ -66,9 +68,21 @@ def bit_variance_Dense():
     return num_set / 1024
 
 
+def bit_variance_Double():
+    num_set = np.zeros(256)
+    model = DoubleDenseHash()
+    for i in range(0, 1024):
+        test_str = GenerateMessage(1)
+        digest = model.hash(test_str)
+        for j in range(0, 256):
+            num_set[j] += digest[j]
+
+    return num_set / 1024
+
+
 def main():
     set_prob = bit_variance_sha()
-    bit_num = [i for i in range(0,256)]
+    bit_num = [i for i in range(0, 256)]
 
     plt.scatter(bit_num, set_prob)
     plt.xlabel("Bit Number")
@@ -90,6 +104,14 @@ def main():
     plt.xlabel("Bit Number")
     plt.ylabel("Percentage of time set")
     plt.title("Dense - Percentage of Bit Set")
+    plt.ylim(0, 1)
+    plt.show()
+
+    set_prob = bit_variance_Double()
+    plt.scatter(bit_num, set_prob)
+    plt.xlabel("Bit Number")
+    plt.ylabel("Percentage of time set")
+    plt.title("Double Dense - Percentage of Bit Set")
     plt.ylim(0, 1)
     plt.show()
 
