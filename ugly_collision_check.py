@@ -8,6 +8,7 @@ import random
 import gc
 from Hash import DenseHash
 from Hash import LSTMHash
+from Hash import DoubleDenseHash
 
 LOOPNUM = 4
 
@@ -46,8 +47,11 @@ def Hashloop(model):
 
 if __name__ == '__main__':
     model = DenseHash()
-    if len(sys.argv) == 2 and sys.argv[1] == "lstm":
-        model = LSTMHash()
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "lstm":
+            model = LSTMHash()
+        if sys.argv[1] == "double" or sys.argv[1] == "double_dense":
+            model = DoubleDenseHash()
 
     average = Hashloop(model)
     print("There was a collision on the %sth hash" % average)

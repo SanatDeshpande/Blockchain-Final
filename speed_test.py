@@ -5,6 +5,7 @@ import hashlib
 from matplotlib import pyplot as plt
 from Hash import DenseHash
 from Hash import LSTMHash
+from Hash import DoubleDenseHash
 import numpy as np
 
 
@@ -29,10 +30,9 @@ def test_speed(multiple, num_tests):
     stop = time.process_time()
     sha_time = (stop - start)
 
-
     # Testing MD5 Run Time
     start = time.process_time()
-    for i in range(0,num_tests):
+    for i in range(0, num_tests):
         hashlib.md5(test_str).hexdigest()
     stop = time.process_time()
     md5_time = (stop - start)
@@ -53,7 +53,15 @@ def test_speed(multiple, num_tests):
     stop = time.process_time()
     Dense_time = (stop - start)
 
-    return sha_time, md5_time, LSTM_time, Dense_time
+    # Testing Double dense hash
+    model = DoubleDenseHash()
+    start = time.process_time()
+    for i in range(0, num_tests):
+        model.hash(nn_test).tostring()
+    stop = time.process_time()
+    Double_time = (stop - start)
+
+    return sha_time, md5_time, LSTM_time, Dense_time, Double_time
 
 
 def main():
@@ -61,19 +69,21 @@ def main():
     md5_times = []
     LSTM_times = []
     dense_times = []
-    lengths = [i for i in range(1,11, 1)]
+    double_dense_times = []
+    lengths = [i for i in range(1, 11, 1)]
     for i in range(1, 11, 1):
-        sha_time, md5_time, LSTM_time, Dense_time = test_speed(i, 1000)
+        sha_time, md5_time, LSTM_time, Dense_time, Double_time = test_speed(i, 1000)
         sha_times.append(sha_time)
         md5_times.append(md5_time)
         LSTM_times.append(LSTM_time)
         dense_times.append(Dense_time)
-
+        double_dense_times.append(Double_time)
 
     plt.scatter(lengths, sha_times, color='b', label="SHA256")
     plt.scatter(lengths, md5_times, color='g', label="MD5")
     plt.scatter(lengths, LSTM_times, color='y', label="LSTM")
     plt.scatter(lengths, dense_times, color='r', label="Dense")
+    plt.scatter(lengths, double_dense_times, color='k', label="Double Dense")
     plt.xlabel("Input string length")
     plt.ylabel("Average run time")
     plt.legend()
