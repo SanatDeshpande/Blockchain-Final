@@ -7,7 +7,9 @@ import numpy as np
 
 
 def GenerateMessage(multiple):
-    # Generate random length message between 512 and 26,112
+    """
+        Generate random length message between 512 and 26,112
+    """
     data = np.zeros(512 * multiple)
     s = np.random.choice(len(data), np.random.randint(len(data)), replace=False)
     data[s] = 1
@@ -15,6 +17,12 @@ def GenerateMessage(multiple):
 
 
 def randomness_test_control(num_test):
+    """
+    Control Test for Randomness Test using SHA256. Takes a message, flips a bit, and compares the two hashes.
+    Half of the bits should be different between the two messages.
+    :param num_test: Number of tests to be run
+    :return: The average number of bits that are flipped for SH
+    """
     sha_num_set = 0
     for i in range(0, num_test):
         test_str_one = random.getrandbits(512)
@@ -32,7 +40,12 @@ def randomness_test_control(num_test):
 
 
 def randomness_test_nn(num_test):
-
+    """
+    Control Test for Randomness Test using SHA256. Takes a message, flips a bit, and compares the two hashes.
+    Half of the bits should be different between the two messages.
+    :param num_test: Number of tests to be run
+    :return: The average number of bits that are flipped for dense and LSTM
+    """
     dnum_set = 0
     ddnum_set = 0
     lnum_set = 0
@@ -61,9 +74,34 @@ def randomness_test_nn(num_test):
     return dnum_set / num_test, lnum_set / num_test, ddnum_set / num_test
 
 
+def randomness_test(hash_function, num_test):
+    """
+    Generic Randomness Test. Takes a message, flips a bit, and compares the two hashes.
+    Half of the bits should be different between the two messages.
+    :param hash_function: Function under test
+    :param num_test: Number of tests
+    :return: Average number of bits that are flipped
+    """
+    num_set = 0
+    for i in range(0, num_test):
+        model = hash_function()
+        msg_one = GenerateMessage(1)
+        flip = np.random.randint(0, 512)
+        msg_two = np.copy(msg_one)
+        msg_two[flip] = (msg_two[flip] + 1) % 2
+        hash_one = model.hash(msg_one)
+        hash_two = model.hash(msg_two)
+        for j in range(0, 256):
+            num_set += hash_one[j] != hash_two[j]
+
+    return num_set / num_test
+
+
 def main():
     dense_avg, lstm_avg, double_avg = randomness_test_nn(100)
+    dense_comp = randomness_test(DenseHash, 100)
     sha_avg = randomness_test_control(100)
+
     print(dense_avg)
     print(double_avg)
     print(lstm_avg)

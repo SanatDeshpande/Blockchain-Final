@@ -10,7 +10,11 @@ import numpy as np
 
 
 def GenerateMessage(multiple):
-    # Generate random length message between 512 and 26,112
+    """
+    Generate random length message of a multiple of 512 bits
+    :param multiple: How many multiples of 512 should be the message
+    :return: Random message
+    """
     data = np.zeros(512 * multiple)
     s = np.random.choice(len(data), np.random.randint(len(data)), replace=False)
     data[s] = 1
@@ -18,7 +22,12 @@ def GenerateMessage(multiple):
 
 
 def test_speed(multiple, num_tests):
+    """
 
+    :param multiple: How long of a message it should be in a multiple of 512 bits
+    :param num_tests: Number of tests to run as a comparison
+    :return: Amount of time to run SHA256, MD5, LSTM, and Dense
+    """
     test_str = ''.join(random.choice(ascii_letters) for j in range(512 * multiple)).encode('UTF-8')
 
     nn_test = GenerateMessage(multiple)
@@ -62,6 +71,24 @@ def test_speed(multiple, num_tests):
     Double_time = (stop - start)
 
     return sha_time, md5_time, LSTM_time, Dense_time, Double_time
+
+
+def speed_test(hash_function, multiple, num_tests):
+    """
+    Test how long it takes to compute hashes.
+    :param hash_function: Hash function to take in and test
+    :param multiple: How many multiples of 512 the input should be in length
+    :param num_tests: Number of times to compute a hash
+    :return: Total time to compute the hash
+    """
+    nn_test = GenerateMessage(multiple)
+    model = hash_function()
+    start = time.process_time()
+    for i in range(0, num_tests):
+        model.hash(nn_test).tostring()
+    stop = time.process_time()
+    total_time = (stop - start)
+    return total_time
 
 
 def main():
