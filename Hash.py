@@ -33,6 +33,19 @@ class LSTMHash:
         data = data.reshape(1, -1, 512)
         return self.compute_hash(torch.tensor(data)).detach().numpy()
 
+class LSTMHashTrained:
+    def __init__(self):
+        self.model = LSTM(512, 256)
+        self.model.load_state_dict(torch.load("./models/trained_lstm"))
+        self.hidden = (torch.zeros((1, 1, 256)), torch.zeros((1, 1, 256)))
+
+    def compute_hash(self, data):
+        output, self.hidden = self.model(data.float(), self.hidden)
+        return output[0][-1] #(batches, seq_size, elements_in_one_unit) -> we only want the last one
+
+    def hash(self, data):
+        data = data.reshape(1, -1, 512)
+        return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 class DoubleDenseHash:
     def __init__(self):
