@@ -34,7 +34,6 @@ def pad_msg(bits, length):
     return padded_msg
 
 
-
 def bitify(msg):
     """
         Function puts together both pad_msg and to_bits functions for ease of calling.
@@ -45,13 +44,16 @@ def bitify(msg):
     if len(bits) % 512 != 0:
         bits = pad_msg(bits, length)
 
-    return bits
+    return list(map(int,list(bits)))
 
 
 if __name__ == '__main__':
     message = "test input message here"
-    print(bitify(message))
-
+    #print(bitify(message))
+    #print(pad_msg(''.join(str(x) for x in [0,0]),2))
+    #print(pad_msg('00',2))
+    zero_str = '00000000'
+    print(zero_str[:0] + '1' + zero_str[1:1])
     #print(len(bitify(message)))    # just to be sure it's a multiple of 512
 
 

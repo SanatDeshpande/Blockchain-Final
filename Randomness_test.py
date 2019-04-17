@@ -4,6 +4,7 @@ from Hash import DenseHash
 from Hash import LSTMHash
 from Hash import DoubleDenseHash
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 def GenerateMessage(multiple):
@@ -23,8 +24,9 @@ def randomness_test_control(num_test):
     :param num_test: Number of tests to be run
     :return: The average number of bits that are flipped for SH
     """
-    sha_num_set = 0
+    sha_num_set_list = []
     for i in range(0, num_test):
+        sha_num_set = 0
         test_str_one = random.getrandbits(512)
         flip = np.random.randint(0, 512)
         test_str_two = test_str_one ^ (1 << flip)
@@ -36,7 +38,8 @@ def randomness_test_control(num_test):
 
         for j in range(0, 256):
             sha_num_set += (digest_xor & (1 << (255 - j))) >> (255 - j)
-    return sha_num_set / num_test
+        sha_num_set_list.append(sha_num_set)
+    return sha_num_set_list
 
 
 def randomness_test_nn(num_test):
@@ -80,10 +83,11 @@ def randomness_test(hash_function, num_test):
     Half of the bits should be different between the two messages.
     :param hash_function: Function under test
     :param num_test: Number of tests
-    :return: Average number of bits that are flipped
+    :return: Array of number of bits that are flipped per test
     """
-    num_set = 0
+    num_set_list = []
     for i in range(0, num_test):
+        num_set = 0
         model = hash_function()
         msg_one = GenerateMessage(1)
         flip = np.random.randint(0, 512)
@@ -93,19 +97,25 @@ def randomness_test(hash_function, num_test):
         hash_two = model.hash(msg_two)
         for j in range(0, 256):
             num_set += hash_one[j] != hash_two[j]
+        num_set_list.append(num_set)
 
-    return num_set / num_test
+    return num_set_list
 
 
 def main():
-    dense_avg, lstm_avg, double_avg = randomness_test_nn(100)
-    dense_comp = randomness_test(DenseHash, 100)
-    sha_avg = randomness_test_control(100)
+    #dense_avg, lstm_avg, double_avg = randomness_test_nn(100)
 
-    print(dense_avg)
-    print(double_avg)
-    print(lstm_avg)
-    print(sha_avg)
+    dense = randomness_test(DenseHash, 100)
+    lstm = randomness_test(LSTMHash, 100)
+    double = randomness_test(DoubleDenseHash, 100)
+    sha = randomness_test_control(100)
+
+    plt.boxplot([dense, lstm, double, sha], labels=['Dense', 'LSTM', 'DoubleDense', 'SHA256'])
+    plt.xlabel("Neural Network Hash function")
+    plt.ylabel("Bits Flipped")
+    plt.title("Randomness Test for Hash Functions")
+    plt.show()
+
     return 0
 
 
