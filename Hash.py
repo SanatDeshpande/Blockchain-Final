@@ -91,13 +91,35 @@ class Dense(nn.Module):
 class DoubleDense(nn.Module):
     def __init__(self):
         super(DoubleDense, self).__init__()
-        self.fc1 = nn.Linear(768, 512)
-        self.fc2 = nn.Linear(512, 512)
-        self.fc3 = nn.Linear(512, 256)
+        self.fc1 = nn.Linear(768, 768)
+        self.fc2 = nn.Linear(768, 768)
+        self.fc3 = nn.Linear(768, 768)
+        self.fc4 = nn.Linear(768, 768)
+        self.fc5 = nn.Linear(768, 512)
+        self.fc6 = nn.Linear(512, 256)
 
     def forward(self, x):
         x = x * 2 - 1
+
         x = F.elu(self.fc1(x))
-        x = self.fc2(x)
-        x = self.fc3(x)
+        x = torch.round(torch.sigmoid(x))
+        x = x * 2 - 1
+
+        x = F.elu(self.fc2(x))
+        x = torch.round(torch.sigmoid(x))
+        x = x * 2 - 1
+
+        x = F.elu(self.fc3(x))
+        x = torch.round(torch.sigmoid(x))
+        x = x * 2 - 1
+
+        x = F.elu(self.fc4(x))
+        x = torch.round(torch.sigmoid(x))
+        x = x * 2 - 1
+
+        x = F.elu(self.fc5(x))
+        x = torch.round(torch.sigmoid(x))
+        x = x * 2 - 1
+
+        x = F.elu(self.fc6(x))
         return torch.round(torch.sigmoid(x))
