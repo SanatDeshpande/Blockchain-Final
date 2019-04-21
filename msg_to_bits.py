@@ -18,9 +18,8 @@ def to_bits(msg):
 
 def pad_msg(bits, length):
     """
-        Function takes string of bits and returns the same bit sequence with
+        Function takes string of bits and returns the same bit sequence
         pre-processed as in the SHA256 scheme.
-
     """
 
     bits = "1" + bits
@@ -44,17 +43,17 @@ def bitify(msg):
     if len(bits) % 512 != 0:
         bits = pad_msg(bits, length)
 
-    return list(map(int,list(bits)))
+    return list(map(int, list(bits)))
 
 
 if __name__ == '__main__':
     message = "test input message here"
-    #print(bitify(message))
+    print(bitify(message))
     #print(pad_msg(''.join(str(x) for x in [0,0]),2))
     #print(pad_msg('00',2))
-    zero_str = '00000000'
-    print(zero_str[:0] + '1' + zero_str[1:1])
-    #print(len(bitify(message)))    # just to be sure it's a multiple of 512
+    #zero_str = '00000000'
+    #print(zero_str[:0] + '1' + zero_str[1:1])
+    print("Input is {} bits.".format(len(bitify(message))))    # just to be sure it's a multiple of 512
 
 
 
