@@ -115,7 +115,8 @@ def main():
     plt.ylabel("Average run time")
     plt.legend()
     plt.title("Running time by Input length (multiples of 512) for 1000 Hashes")
-    plt.show()
+    #plt.show()
+    plt.savefig('speed_test.png')
     return 1
 
 
