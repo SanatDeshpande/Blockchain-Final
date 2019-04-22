@@ -32,7 +32,7 @@ class LSTMHash:
 
     def hash(self, data):
         data = data.reshape(1, -1, 512)
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+        return self.compute_hash(torch.tensor(data).cpu()).detach().numpy()
 
 class LSTMHashTrained:
     def __init__(self):
