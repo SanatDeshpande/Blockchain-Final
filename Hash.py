@@ -17,7 +17,7 @@ class DenseHash:
         return self.prev_hash
 
     def hash(self, data):
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+        return self.compute_hash(torch.tensor(data)).detach().cpu().numpy()
 
 
 class LSTMHash:
@@ -46,7 +46,7 @@ class LSTMHashTrained:
 
     def hash(self, data):
         data = data.reshape(1, -1, 512)
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+        return self.compute_hash(torch.tensor(data)).detach().cpu().numpy()
 
 class DoubleDenseHash:
     def __init__(self):
@@ -61,7 +61,7 @@ class DoubleDenseHash:
         return self.prev_hash
 
     def hash(self, data):
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+        return self.compute_hash(torch.tensor(data)).detach().cpu().numpy()
 
 
 class LSTM(nn.Module):
