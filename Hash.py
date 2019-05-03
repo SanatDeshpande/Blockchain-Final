@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import msg_to_bits as m2b
 
 
 class DenseHash:
@@ -15,8 +16,11 @@ class DenseHash:
             self.prev_hash = self.model(message.float())
         return self.prev_hash
 
-    def hash(self, data):
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+    def hash(self, data, is_string=True):
+        if is_string:
+            return self.compute_hash(torch.tensor(m2b.bitify(data))).detach().numpy()
+        else:
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 
 class LSTMHash:
@@ -29,9 +33,14 @@ class LSTMHash:
         output, self.hidden = self.model(data.float(), self.hidden)
         return output[0][-1] #(batches, seq_size, elements_in_one_unit) -> we only want the last one
 
-    def hash(self, data):
-        data = data.reshape(1, -1, 512)
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+    def hash(self, data, is_string=True):
+        if is_string:
+            data = m2b.bitify(data)
+            data = data.reshape(1, -1, 512)
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
+        else:
+            data = data.reshape(1, -1, 512)
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 class LSTMHashTrained:
     def __init__(self):
@@ -43,9 +52,14 @@ class LSTMHashTrained:
         output, self.hidden = self.model(data.float(), self.hidden)
         return output[0][-1] #(batches, seq_size, elements_in_one_unit) -> we only want the last one
 
-    def hash(self, data):
-        data = data.reshape(1, -1, 512)
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+    def hash(self, data, is_string=True):
+        if is_string:
+            data = m2b.bitify(data)
+            data = data.reshape(1, -1, 512)
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
+        else:
+            data = data.reshape(1, -1, 512)
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 class DoubleDenseHash:
     def __init__(self):
@@ -59,8 +73,11 @@ class DoubleDenseHash:
             self.prev_hash = self.model(message.float())
         return self.prev_hash
 
-    def hash(self, data):
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+    def hash(self, data, is_string=True):
+        if is_string:
+            return self.compute_hash(torch.tensor(m2b.bitify(data))).detach().numpy()
+        else:
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 
 class LSTM(nn.Module):

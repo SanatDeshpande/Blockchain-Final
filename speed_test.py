@@ -50,7 +50,7 @@ def test_speed(multiple, num_tests):
     model = LSTMHash()
     start = time.process_time()
     for i in range(0, num_tests):
-        model.hash(nn_test).tostring()
+        model.hash(nn_test, False).tostring()
     stop = time.process_time()
     LSTM_time = (stop - start)
 
@@ -58,7 +58,7 @@ def test_speed(multiple, num_tests):
     model = DenseHash()
     start = time.process_time()
     for i in range(0, num_tests):
-        model.hash(nn_test).tostring()
+        model.hash(nn_test, False).tostring()
     stop = time.process_time()
     Dense_time = (stop - start)
 
@@ -66,7 +66,7 @@ def test_speed(multiple, num_tests):
     model = DoubleDenseHash()
     start = time.process_time()
     for i in range(0, num_tests):
-        model.hash(nn_test).tostring()
+        model.hash(nn_test, False).tostring()
     stop = time.process_time()
     Double_time = (stop - start)
 
@@ -85,7 +85,7 @@ def speed_test(hash_function, multiple, num_tests):
     model = hash_function()
     start = time.process_time()
     for i in range(0, num_tests):
-        model.hash(nn_test).tostring()
+        model.hash(nn_test, False).tostring()
     stop = time.process_time()
     total_time = (stop - start)
     return total_time

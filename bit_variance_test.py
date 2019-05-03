@@ -45,7 +45,7 @@ def bit_variance_LSTM():
     model = LSTMHash()
     for i in range(0, 1024):
         test_str = GenerateMessage(1)
-        digest = model.hash(test_str)
+        digest = model.hash(test_str, False)
         for j in range(0, 256):
             num_set[j] += int(digest[j])
 
@@ -61,7 +61,7 @@ def bit_variance_Dense():
     model = DenseHash()
     for i in range(0, 1024):
         test_str = GenerateMessage(1)
-        digest = model.hash(test_str)
+        digest = model.hash(test_str, False)
         for j in range(0, 256):
             num_set[j] += digest[j]
 
@@ -73,7 +73,7 @@ def bit_variance_Double():
     model = DoubleDenseHash()
     for i in range(0, 1024):
         test_str = GenerateMessage(1)
-        digest = model.hash(test_str)
+        digest = model.hash(test_str, False)
         for j in range(0, 256):
             num_set[j] += digest[j]
 
@@ -90,7 +90,7 @@ def bit_variance_test(hash_function):
     model = hash_function()
     for i in range(0, 1024):
         test_str = GenerateMessage(1)
-        digest = model.hash(test_str)
+        digest = model.hash(test_str, False)
         for j in range(0, 256):
             num_set[j] += digest[j]
 

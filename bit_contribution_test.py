@@ -25,7 +25,7 @@ def bit_contribution_test(hash_function):
     i = 0
     for to_hash in hash_list:
         i += 1
-        hash_val = model.hash(to_hash).tostring()
+        hash_val = model.hash(to_hash, False).tostring()
         if hash_val in hashed_dict:
             collisions += 1
         hashed_dict[hash_val] = True
