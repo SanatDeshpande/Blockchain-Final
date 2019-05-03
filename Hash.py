@@ -35,6 +35,7 @@ class LSTMHash:
         return output[0][-1] #(batches, seq_size, elements_in_one_unit) -> we only want the last one
 
     def hash(self, data, is_string=True):
+        self.hidden = (torch.zeros((1, 1, 256)), torch.zeros((1, 1, 256)))
         if is_string:
             data = m2b.bitify(data)
             data = data.reshape(1, -1, 512)
@@ -54,6 +55,7 @@ class LSTMHashTrained:
         return output[0][-1] #(batches, seq_size, elements_in_one_unit) -> we only want the last one
 
     def hash(self, data, is_string=True):
+        self.hidden = (torch.zeros((1, 1, 256)), torch.zeros((1, 1, 256)))
         if is_string:
             data = m2b.bitify(data)
             data = data.reshape(1, -1, 512)
