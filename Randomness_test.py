@@ -103,7 +103,6 @@ def randomness_test(hash_function, num_test):
 
 
 def main():
-    #dense_avg, lstm_avg, double_avg = randomness_test_nn(100)
 
     dense = randomness_test(DenseHash, 100)
     lstm = randomness_test(LSTMHash, 100)

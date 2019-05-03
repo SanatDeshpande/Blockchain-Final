@@ -8,7 +8,6 @@ from Hash import DenseHash
 from Hash import DoubleDenseHash
 
 
-
 def GenerateMessage(multiple):
     """
     Generate random length message between 512 and 26,112
