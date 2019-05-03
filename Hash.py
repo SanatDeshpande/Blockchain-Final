@@ -48,7 +48,7 @@ class LSTMHash:
 class LSTMHashTrained:
     def __init__(self):
         self.model = LSTM(512, 256)
-        self.model.load_state_dict(torch.load("./models/trained_lstm"))
+        self.model.load_state_dict(torch.load("./models/trained_lstm", map_location=torch.device('cpu')))
         self.hidden = (torch.zeros((1, 1, 256)), torch.zeros((1, 1, 256)))
 
     def compute_hash(self, data):
