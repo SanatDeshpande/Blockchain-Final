@@ -16,6 +16,7 @@ class DenseHash:
         return self.prev_hash
 
     def hash(self, data):
+        self.prev_hash = torch.zeros(256).float() #reset value
         return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 
@@ -60,6 +61,7 @@ class DoubleDenseHash:
         return self.prev_hash
 
     def hash(self, data):
+        self.prev_hash = torch.zeros(256).float() #reset value
         return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 
@@ -99,6 +101,8 @@ class DoubleDense(nn.Module):
         self.fc6 = nn.Linear(512, 256)
 
     def forward(self, x):
+        with open('test', 'ab') as f:
+            x.detach().numpy().tofile(f)
         x = x * 2 - 1
 
         x = F.elu(self.fc1(x))
