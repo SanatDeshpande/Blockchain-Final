@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import msg_to_bits as m2b
+import numpy as np
 
 
 class DenseHash:
@@ -37,7 +38,7 @@ class LSTMHash:
     def hash(self, data, is_string=True):
         self.hidden = (torch.zeros((1, 1, 256)), torch.zeros((1, 1, 256)))
         if is_string:
-            data = m2b.bitify(data)
+            data = np.asarray(m2b.bitify(data))
             data = data.reshape(1, -1, 512)
             return self.compute_hash(torch.tensor(data)).detach().numpy()
         else:
