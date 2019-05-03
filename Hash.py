@@ -101,8 +101,6 @@ class DoubleDense(nn.Module):
         self.fc6 = nn.Linear(512, 256)
 
     def forward(self, x):
-        with open('test', 'ab') as f:
-            x.detach().numpy().tofile(f)
         x = x * 2 - 1
 
         x = F.elu(self.fc1(x))
