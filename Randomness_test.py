@@ -60,14 +60,14 @@ def randomness_test_nn(num_test):
         dense_model = DenseHash()
         double_model = DoubleDenseHash()
         lstm_model = LSTMHash()
-        dhash_one = dense_model.hash(msg_one)
-        dhash_two = dense_model.hash(msg_two)
+        dhash_one = dense_model.hash(msg_one, False)
+        dhash_two = dense_model.hash(msg_two, False)
 
-        ddhash_one = double_model.hash(msg_one)
-        ddhash_two = double_model.hash(msg_two)
+        ddhash_one = double_model.hash(msg_one, False)
+        ddhash_two = double_model.hash(msg_two, False)
 
-        lhash_one = lstm_model.hash(msg_one)
-        lhash_two = lstm_model.hash(msg_two)
+        lhash_one = lstm_model.hash(msg_one, False)
+        lhash_two = lstm_model.hash(msg_two, False)
 
         for j in range(0, 256):
             dnum_set += dhash_one[j] != dhash_two[j]
@@ -93,8 +93,8 @@ def randomness_test(hash_function, num_test):
         flip = np.random.randint(0, 512)
         msg_two = np.copy(msg_one)
         msg_two[flip] = (msg_two[flip] + 1) % 2
-        hash_one = model.hash(msg_one)
-        hash_two = model.hash(msg_two)
+        hash_one = model.hash(msg_one, False)
+        hash_two = model.hash(msg_two, False)
         for j in range(0, 256):
             num_set += hash_one[j] != hash_two[j]
         num_set_list.append(num_set)

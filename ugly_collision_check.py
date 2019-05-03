@@ -30,7 +30,7 @@ def Hashloop(model):
         hashmap = dict()
         while not isCollision:
             message = GenerateMessage()
-            outputHash = model.hash(message).tostring()
+            outputHash = model.hash(message, False).tostring()
             if outputHash in hashmap:
                 isCollision = True
             hashmap[outputHash] = True
