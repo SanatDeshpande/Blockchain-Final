@@ -16,9 +16,12 @@ class DenseHash:
             self.prev_hash = self.model(message.float())
         return self.prev_hash
 
-    def hash(self, data):
-        self.prev_hash = torch.zeros(256).float() #reset value
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+    def hash(self, data, is_string=True):
+        self.prev_hash = torch.zeros(256).float()  # reset value
+        if is_string:
+            return self.compute_hash(torch.tensor(m2b.bitify(data))).detach().numpy()
+        else:
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 
 class LSTMHash:
@@ -71,9 +74,12 @@ class DoubleDenseHash:
             self.prev_hash = self.model(message.float())
         return self.prev_hash
 
-    def hash(self, data):
+    def hash(self, data, is_string=True):
         self.prev_hash = torch.zeros(256).float() #reset value
-        return self.compute_hash(torch.tensor(data)).detach().numpy()
+        if is_string:
+            return self.compute_hash(torch.tensor(m2b.bitify(data))).detach().numpy()
+        else:
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
 
 
 class LSTM(nn.Module):
@@ -136,3 +142,12 @@ class DoubleDense(nn.Module):
 
         x = F.elu(self.fc6(x))
         return torch.round(torch.sigmoid(x))
+
+
+
+"""
+        if is_string:
+            return self.compute_hash(torch.tensor(m2b.bitify(data))).detach().numpy()
+        else:
+            return self.compute_hash(torch.tensor(data)).detach().numpy()
+"""
