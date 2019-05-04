@@ -7,7 +7,7 @@ to emulate.
 	* `collision_check.py` will run the Dense model by default. Arguments `lstm` and `double` can be passed to run the test on the other respective models.
 		* The command to run the collision check on the DoubleDense model would be `python collision_check.py double`
 		
-* Here is a sample script to simply test the different models and hash arbitrary strings:
+* Below is a sample python script to simply test the different models and hash arbitrary strings:
 
 ```
 from Hash import DenseHash
